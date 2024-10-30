@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Publish/Subscribe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 16px;
+        }
+        #messages_view {
+            width: 100%;
+            height: 384px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            margin-bottom: 16px;
+        }
+        #input_message {
+            width: 100%;
+            height: 48px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        #publish_button {
+            padding: 8px 16px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="messages_view">Messages will appear here</div>
+    <input type="text" id="input_message" placeholder="Enter message to publish">
+    <button id="publish_button">Publish</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <script>
+        // MQTT Connection Options
+        const brokerUrl = "wss://broker.hivemq.com:8000/mqtt";  // WebSocket URL for the HiveMQ broker
+        const topic = "test/topic";  // You can change this topic
+
+        // Connect to MQTT broker
+        const client = mqtt.connect(brokerUrl);
+
+        client.on('connect', () => {
+            console.log('Connected to broker');
+            client.subscribe(topic, (err) => {
+                if (err) {
+                    console.log('Failed to subscribe:', err);
+                } else {
+                    console.log('Subscribed to topic:', topic);
+                }
+            });
+        });
+
+        client.on('message', (topic, message) => {
+            const msg = message.toString();
+            displayMessage(`Received: ${msg}`);
+        });
+
+        // Publish message on button click
+        document.getElementById('publish_button').addEventListener('click', () => {
+            const message = document.getElementById('input_message').value;
+            if (message) {
+                client.publish(topic, message, (err) => {
+                    if (err) {
+                        displayMessage('Failed to publish message');
+                    } else {
+                        displayMessage(`Published: ${message}`);
+                    }
+                });
+                document.getElementById('input_message').value = '';  // Clear the input
+            }
+        });
+
+        // Function to display messages
+        function displayMessage(message) {
+            const messagesView = document.getElementById('messages_view');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = message;
+            messagesView.appendChild(newMessage);
+            messagesView.scrollTop = messagesView.scrollHeight;  // Scroll to the latest message
+        }
+    </script>
+</body>
+</html>
