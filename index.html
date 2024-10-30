@@ -10,24 +10,20 @@
             margin: 0;
             padding: 10px;
         }
-
         .container {
             max-width: 600px;
             margin: auto;
         }
-
         h1 {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
         }
-
         label {
             display: block;
             font-size: 16px;
             margin-top: 20px;
         }
-
         input[type="text"], textarea {
             width: 100%;
             padding: 10px;
@@ -38,12 +34,6 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
         button {
             width: 100%;
             padding: 10px;
@@ -54,11 +44,9 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
         .messages {
             background-color: #ddd;
             padding: 10px;
@@ -69,46 +57,32 @@
             color: #000;
         }
     </style>
-    <!-- Include Paho MQTT library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.0/mqttws31.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>MQTT Publisher and Subscriber</h1>
-
-        <!-- Publish Section -->
         <label for="publish-topic">Publish Topic:</label>
         <input type="text" id="publish-topic" placeholder="Enter topic to publish to">
-
         <label for="publish-message">Message to Publish:</label>
         <input type="text" id="publish-message" placeholder="Enter message to publish">
-
         <button onclick="publishMessage()">Publish Message</button>
-
-        <!-- Subscribe Section -->
         <label for="subscribe-topic">Subscribe to Topic:</label>
         <input type="text" id="subscribe-topic" placeholder="Enter topic to subscribe to">
-
         <button onclick="subscribeTopic()">Subscribe</button>
-
-        <!-- Messages Section -->
         <label>Subscribed Messages:</label>
         <div class="messages" id="subscribed-messages">
             Messages will appear here
         </div>
     </div>
-
     <script>
         let client;
 
-        // Connect to MQTT broker
         function connectMQTT() {
-            const brokerUrl = "wss://broker.hivemq.com:8000/mqtt"; // WebSocket URL
+            const brokerUrl = "wss://broker.hivemq.com:8000/mqtt";
             client = new Paho.MQTT.Client(brokerUrl, "clientId-" + Math.random());
-
             client.onConnectionLost = onConnectionLost;
             client.onMessageArrived = onMessageArrived;
-
             client.connect({ onSuccess: onConnect });
         }
 
@@ -135,6 +109,7 @@
                 mqttMessage.destinationName = topic;
                 client.send(mqttMessage);
                 alert(`Message published to ${topic}:\n${message}`);
+                console.log(`Published: ${message} to topic: ${topic}`);
             } else {
                 alert('Please enter both topic and message.');
             }
@@ -151,7 +126,6 @@
             }
         }
 
-        // Initialize connection when the page loads
         window.onload = connectMQTT;
     </script>
 </body>
