@@ -80,7 +80,7 @@
         let isConnected = false;
 
         function connectMQTT() {
-            const brokerUrl = "wss://broker.hivemq.com:8000/mqtt";
+            const brokerUrl = "wss://mqtt-dashboard.com:8884/mqtt";
             client = new Paho.MQTT.Client(brokerUrl, "clientId-" + Math.random());
             client.onConnectionLost = onConnectionLost;
             client.onMessageArrived = onMessageArrived;
