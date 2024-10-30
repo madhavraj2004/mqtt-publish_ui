@@ -77,22 +77,39 @@
     </div>
     <script>
         let client;
+        let isConnected = false;
 
         function connectMQTT() {
             const brokerUrl = "wss://broker.hivemq.com:8000/mqtt";
             client = new Paho.MQTT.Client(brokerUrl, "clientId-" + Math.random());
             client.onConnectionLost = onConnectionLost;
             client.onMessageArrived = onMessageArrived;
-            client.connect({ onSuccess: onConnect });
+            
+            client.connect({
+                onSuccess: onConnect,
+                onFailure: onFailure,
+                useSSL: true,
+                timeout: 10,
+                reconnect: true
+            });
         }
 
         function onConnect() {
             console.log("Connected to MQTT broker");
+            isConnected = true;
+        }
+
+        function onFailure(responseObject) {
+            console.log("Failed to connect: " + responseObject.errorMessage);
+            alert("Failed to connect to MQTT broker. Please check your network or broker settings.");
         }
 
         function onConnectionLost(responseObject) {
+            isConnected = false;
             if (responseObject.errorCode !== 0) {
-                console.log("Connection Lost: " + responseObject.errorMessage);
+                console.log("Connection lost: " + responseObject.errorMessage);
+                alert("Connection lost. Reconnecting...");
+                connectMQTT(); // Attempt to reconnect
             }
         }
 
@@ -102,6 +119,10 @@
         }
 
         function publishMessage() {
+            if (!isConnected) {
+                alert("Not connected to MQTT broker. Please wait for connection.");
+                return;
+            }
             const topic = document.getElementById('publish-topic').value;
             const message = document.getElementById('publish-message').value;
             if (topic && message) {
@@ -116,6 +137,10 @@
         }
 
         function subscribeTopic() {
+            if (!isConnected) {
+                alert("Not connected to MQTT broker. Please wait for connection.");
+                return;
+            }
             const topic = document.getElementById('subscribe-topic').value;
             if (topic) {
                 client.subscribe(topic);
