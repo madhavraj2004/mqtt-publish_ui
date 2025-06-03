@@ -1,29 +1,51 @@
-MQTT Publisher and Subscriber UI
-A simple web-based user interface for publishing and subscribing to MQTT topics using the Paho MQTT JavaScript client.
+# MQTT Publisher and Subscriber UI
 
-Features
-Publish messages to any MQTT topic
-Subscribe to MQTT topics and view real-time messages
-Uses a public MQTT broker (wss://broker.hivemq.com:8000/mqtt)
-Simple, mobile-friendly UI
-Getting Started
-Clone or Download this repository.
-Open the index.html file in your web browser.
-No server setup is required; everything runs in your browser.
+This is a simple web-based MQTT Publisher and Subscriber interface built with HTML and JavaScript using the [Eclipse Paho MQTT JavaScript client](https://www.eclipse.org/paho/index.php?page=clients/js/index.php). It allows users to publish messages to an MQTT topic and subscribe to topics to receive messages—all from the browser.
 
-Usage
-Enter a topic and a message, then click Publish Message to send it.
-Enter a topic and click Subscribe to listen for incoming messages.
-Received messages will appear in the "Subscribed Messages" section.
-Technologies Used
-HTML & CSS for layout and styling
-JavaScript for interactivity
-Paho MQTT JavaScript library for MQTT communication
-Demo
-Screenshot <!-- Add a screenshot if available -->
+## Features
 
-Notes
-Uses a public MQTT broker for demonstration. For production, use a secure/private broker.
-Make sure you have internet access to load the Paho MQTT library from CDN.
-Author
-madhavraj2004
+- **Connects automatically** to a public MQTT broker (HiveMQ).
+- **Publish** messages to any MQTT topic.
+- **Subscribe** to any topic and view incoming messages in real time.
+- Simple, clean UI with responsive design.
+
+## How It Works
+
+- **Broker:** Uses [HiveMQ's public broker](https://www.hivemq.com/public-mqtt-broker/) at `wss://broker.hivemq.com:8000/mqtt`.
+- **Client:** Each session uses a random client ID.
+- **Publishing:** Enter a topic and message, then click "Publish Message" to send.
+- **Subscribing:** Enter a topic and click "Subscribe" to start receiving messages.
+
+## Getting Started
+
+1. **Clone or download** this repository.
+
+2. **Open the HTML file** directly in your browser (no backend/server needed):
+    ```
+    mqtt-publish_ui/index.html
+    ```
+
+3. **Use the interface:**
+   - Enter a topic and message to publish.
+   - Enter a topic to subscribe and start receiving messages.
+
+## Example
+
+![Screenshot](screenshot.png)
+
+## Dependencies
+
+- [Eclipse Paho MQTT JavaScript Client](https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.0/mqttws31.min.js) (loaded via CDN)
+
+## Customization
+
+- You can change the broker URL or add authentication if needed by editing the `brokerUrl` variable in the script section.
+- All logic is contained in the HTML file; no additional setup required.
+
+## License
+
+This project is provided under the [MIT License](LICENSE).
+
+---
+
+Made by madhav
